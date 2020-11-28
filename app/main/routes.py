@@ -2,8 +2,8 @@ from app import db
 from app.main import bp
 from flask import render_template, request, redirect, jsonify
 from flask_login import login_required, current_user
-from app.main.forms import CreateOrder
-from app.models import OrderTypes, Tag, Order, CustomInputs
+from app.main.forms import CreateOrder, CreateNote
+from app.models import OrderTypes, Tag, Order, CustomInputs, Note
 from werkzeug.utils import secure_filename
 from config import Config
 import os
@@ -30,9 +30,9 @@ def index():
     for tag in Tag.query.all():
         create_order_form.executors.choices.append((str(tag.id), tag.name))
 
+    create_note_form = CreateNote()
 
     if create_order_form.validate_on_submit():
-        print(request.form)
         all_fields = request.form
         custom_fields = {}
         for field in all_fields:
@@ -65,9 +65,25 @@ def index():
         db.session.add(order)
         db.session.commit()
         return redirect(request.referrer)
+
+    if create_note_form.validate_on_submit():
+        note = Note()
+        note.creator = current_user.id
+        note.text = create_note_form.text.data
+
+        all_fields = request.form
+        for field in all_fields:
+            if 'file_id' in field:
+                note.sound_file = os.path.join(Config.UPLOAD_FOLDER, f'{all_fields["file_id"]}sound.wav')
+
+        db.session.add(note)
+        db.session.commit()
+        return redirect(request.referrer)
+
     return render_template('main/index.html',
                            title=title,
                            create_order_form=create_order_form,
+                           create_note_form = create_note_form,
                            orders_iam_creator=orders_iam_creator,
                            orders_iam_executor=orders_iam_executor,
                            custom_inputs=CustomInputs.query.all())

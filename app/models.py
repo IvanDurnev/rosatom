@@ -81,6 +81,9 @@ class User(UserMixin, db.Model):
     def get_orders_iam_executor(self):
         return Order.query.filter(Order.executors.contains(self)).all()
 
+    def get_notes(self):
+        return Note.query.filter(Note.creator == self.id).all()
+
     @staticmethod
     def verify_reset_password_token(token):
         try:
@@ -177,7 +180,7 @@ class Order(db.Model):
 
     def get_status(self):
         return OrderStatus.query.get(self.status)
-        
+      
 class CustomInputs(db.Model):
     """
     Structure
@@ -195,3 +198,10 @@ class CustomInputs(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     preset_name = db.Column(db.String(64), nullable=False)
     preset = db.Column(db.JSON, default=[])
+    
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    text = db.Column(db.String(4096))
+    sound_file = db.Column(db.String(1024))
+    creator = db.Column(db.Integer, db.ForeignKey('user.id'))
+    creation_date = db.Column(db.DateTime, default=datetime.now())

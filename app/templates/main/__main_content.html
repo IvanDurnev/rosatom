@@ -38,10 +38,10 @@
                     <a class="nav-link disabled" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Архив</a>
                 </li>
                 <li>
-                    <a class="btn btn-success mt-3" data-toggle="modal" data-target="#exampleModal" >Создать задачу</a>
+                    <a class="btn btn-success mt-3" data-toggle="modal" data-target="#modalCreateOrder" >Создать задачу</a>
                 </li>
                 <li>
-                    <a class="btn btn-success mt-2" data-toggle="modal" data-target="#exampleModal">Создать заметку</a>
+                    <a class="btn btn-success mt-2" data-toggle="modal" data-target="#modalCreateNote">Создать заметку</a>
                 </li>
             </ul>
         </div>
@@ -125,48 +125,33 @@
                 </div>
 
                 <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="send-tab">
-{#                    {% for order in orders_iam_creator %}#}
-{#                        <div class="card">#}
-{#                            <div class="card-body">#}
-{#                                <p class="badge {{ order.get_status().description }}">{{ order.get_status().title }}</p>#}
-{#                                <div class="input-group">#}
-{#                                    <div class="form-check">#}
-{#                                        {% if order.done %}#}
-{#                                            <input class="form-check-input position-static" checked="checked" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">#}
-{#                                        {% else %}#}
-{#                                            <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">#}
-{#                                        {% endif %}#}
-{#                                    </div>#}
-{#                                    <h4 class="card-title">{{ order.title }}</h4>#}
-{#                                    <div class="card-text">#}
-{#                                        <span class="">Срок выполнения {{ order.deadline }}</span>#}
-{#                                        <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% endfor %}#}
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        {% for note in current_user.get_notes() %}
+                            <li class="nav-item" role="presentation">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="input-group">
+        {#                                    <h4 class="card-title">{{ order.title }}</h4>#}
+                                            <div class="card-text">
+                                                <p style="overflow: hidden; text-overflow: ellipsis; max-height: 100px;">{{ note.text }}</p>
+                                                <span class="small">Дата создания: {{ note.creation_date }}</span>
+                                            </div>
+                                            <a class="nav-link" id="nav-note-{{ note.id }}-tab" data-toggle="tab" href="#note-{{ note.id }}" role="tab" aria-controls="note-{{ note.id }}" aria-selected="true">Подробно</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-            <div class="col-lg-7">
-{#            <h2 class="card-title">Провести инструктаж </h2>#}
-{#            <h4 class="card-subtitle">Провести инструктаж </h4>#}
-{#            <div class="card-title">#}
-{#                Таким образом дальнейшее развитие различных форм деятельности представляет собой интересный эксперимент проверки соответствующий условий активизации. Повседневная практика показывает, что постоянное информационно-пропагандистское обеспечение нашей деятельности позволяет оценить значение систем массового участия. Идейные соображения высшего порядка, а также консультация с широким активом в значительной степени обуславливает создание соответствующий условий активизации.#}
-{#            </div>#}
-{##}
-{#            <h3>Срок выполнения 29.11.2020</h3>#}
-{#            <form action="">#}
-{#                <div class="form-group">#}
-{#                    <label for="exampleFormControlTextarea1">Комментарий</label>#}
-{#                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>#}
-{#                    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>#}
-{#                </div>#}
-{#            </form>#}
-{##}
-{#            <span>#}
-{#                28.11.2020 Иван Иванович Иванов#}
-{#            </span>#}
+        </div>
+
+        <div class="col-lg-7">
+            <div class="tab-content">
+                {% for note in current_user.get_notes() %}
+                    <div class="tab-pane" id="note-{{ note.id }}" role="tabpanel" aria-labelledby="nav-note-{{ note.id }}-tab">{{ note.text }}</div>
+                {% endfor %}
             </div>
         </div>
     </div>

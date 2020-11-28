@@ -15,3 +15,8 @@ class CreateOrder(FlaskForm):
     # done = BooleanField(label='Выполнено', default=False)
     executors = SelectField(label='Исполнители', choices=[])
     submit = SubmitField('Создать')
+
+
+class CreateNote(FlaskForm):
+    text = TextAreaField('Текст', validators=[DataRequired()])
+    submit_note = SubmitField('Сохранить')
