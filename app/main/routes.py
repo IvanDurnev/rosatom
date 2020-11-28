@@ -1,3 +1,4 @@
+from datetime import datetime
 from app import db
 from app.main import bp
 from flask import render_template, request, redirect, jsonify
@@ -94,7 +95,15 @@ def get_preset(id):
     preset = CustomInputs.query.filter_by(id=id).first()
     return jsonify(preset.preset)
 
-
+@bp.route('/get_order_json/<id>')
+def get_order_json(id):
+    order = Order.query.filter_by(id=id).first()
+    return jsonify({
+            x[0]: [
+                g.strftime('%Y-%m-%d %H:%M:%S') if type(g) == datetime else g for g in [x[1]]
+                ][0]
+            for x in order.__dict__.items() if type(x[1]) == int or type(x[1]) == datetime or type(x[1]) == str or type(x[1]) == list
+        })
 
 @bp.route('/recognize_file', methods=['GET', 'POST'])
 def recognize_file():
