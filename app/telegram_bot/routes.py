@@ -9,6 +9,7 @@ from app.telegram_bot import handlers
 
 dispatcher.add_handler(CommandHandler('start', handlers.command_start))
 dispatcher.add_handler(CommandHandler('users_count', handlers.command_users_count))
+dispatcher.add_handler(CommandHandler('tasks', handlers.user_tasks))
 dispatcher.add_handler(MessageHandler(Filters.reply, callback=handlers.reply_message))
 dispatcher.add_handler(MessageHandler(Filters.text, callback=handlers.text_message))
 dispatcher.add_handler(MessageHandler(Filters.photo, callback=handlers.photo_message))
