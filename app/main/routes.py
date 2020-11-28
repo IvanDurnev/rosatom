@@ -3,7 +3,7 @@ from app.main import bp
 from flask import render_template, request, redirect, jsonify
 from flask_login import login_required, current_user
 from app.main.forms import CreateOrder, CreateNote
-from app.models import OrderTypes, Tag, Order, Note
+from app.models import OrderTypes, Tag, Order, CustomInputs, Note
 from werkzeug.utils import secure_filename
 from config import Config
 import os
@@ -85,7 +85,15 @@ def index():
                            create_order_form=create_order_form,
                            create_note_form = create_note_form,
                            orders_iam_creator=orders_iam_creator,
-                           orders_iam_executor=orders_iam_executor)
+                           orders_iam_executor=orders_iam_executor,
+                           custom_inputs=CustomInputs.query.all())
+
+
+@bp.route("/get_preset/<id>")
+def get_preset(id):
+    preset = CustomInputs.query.filter_by(id=id).first()
+    return jsonify(preset.preset)
+
 
 
 @bp.route('/recognize_file', methods=['GET', 'POST'])
