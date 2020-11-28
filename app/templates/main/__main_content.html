@@ -92,7 +92,7 @@
                                                         <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">
                                                     {% endif %}
                                                 </div>
-                                                <h4 class="card-title">{{ order.title }}</h4>
+                                                <a href="#" onclick="get_order({{ order.id }})"><h4 class="card-title">{{ order.title }}</h4></a>
                                                 <div class="card-text">
                                                     <span class="">Срок выполнения {{ order.deadline }}</span>
                                                     <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
@@ -117,7 +117,7 @@
                                                         <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">
                                                     {% endif %}
                                                 </div>
-                                                <a href="#"><h4 class="card-title">{{ order.title }}</h4></a>
+                                                <a href="#" onclick="get_order({{ order.id }})"><h4 class="card-title">{{ order.title }}</h4></a>
                                                 <div class="card-text">
                                                     <span class="">Срок выполнения {{ order.deadline }}</span>
                                                     <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
@@ -158,7 +158,7 @@
                                                         <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">
                                                     {% endif %}
                                                 </div>
-                                                <a href="#"><h4 class="card-title">{{ order.title }}</h4></a>
+                                                <a href="#" onclick="get_order({{ order.id }})"><h4 class="card-title">{{ order.title }}</h4></a>
                                                 <div class="card-text">
                                                     <span class="">Срок выполнения {{ order.deadline }}</span>
                                                     <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
@@ -183,7 +183,7 @@
                                                         <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">
                                                     {% endif %}
                                                 </div>
-                                                <a href="#"><h4 class="card-title">{{ order.title }}</h4></a>
+                                                <a href="#" onclick="get_order({{ order.id }})"><h4 class="card-title">{{ order.title }}</h4></a>
                                                 <div class="card-text">
                                                     <span class="">Срок выполнения {{ order.deadline }}</span>
                                                     <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
@@ -232,6 +232,19 @@
     }
 
     function showNote(data) {
+        $('#detailed_info').empty();
+        $('#detailed_info').append($(data));
+    }
+
+    function get_order(orderID) {
+        $.ajax({
+            url: `/get_order_${orderID}`,
+            method: "GET",
+            success: showOrder
+        });
+    }
+
+    function showOrder(data) {
         $('#detailed_info').empty();
         $('#detailed_info').append($(data));
     }

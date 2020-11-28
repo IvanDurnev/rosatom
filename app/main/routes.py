@@ -116,3 +116,9 @@ def recognize_file():
 def get_note(note_id):
     return render_template('main/__noteData.html',
                            note = Note.query.get(note_id))
+
+
+@bp.route('/get_order_<order_id>', methods=['GET'])
+def get_order(order_id):
+    return render_template('main/__orderData.html',
+                           order = Order.query.get(order_id))
