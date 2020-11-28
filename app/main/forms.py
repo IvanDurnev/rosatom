@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, IntegerField, SelectField, DateTimeField, BooleanField, SubmitField
+from wtforms import StringField, TextAreaField, IntegerField, SelectField, DateTimeField, BooleanField, SubmitField, FileField
 from wtforms.validators import DataRequired
 from datetime import datetime
 
@@ -7,6 +7,7 @@ from datetime import datetime
 class CreateOrder(FlaskForm):
     title = StringField(label='Название', validators=[DataRequired()])
     description = TextAreaField(label='Описание', validators=[DataRequired()])
+    file = FileField(label='Подгрузить файл')
     priority = IntegerField(label='Приоритет', default=1)
     type = SelectField(label='Тип задачи', choices=[])
     deadline = DateTimeField(label='Дэдлайн', default=datetime.now())

@@ -25,8 +25,16 @@
         <div class="col-3">
             Колонки с задачами
             <div class="row">
-                <div class="col">Информирование</div>
-                <div class="col">Поручения</div>
+                <div class="col">
+                    <p>я</p>
+                    {% for order in orders_iam_creator %}
+                        <a href="#">{{ order.id }} {{ order.title }}</a>
+                    {% endfor %}
+                    <p>мне</p>
+                    {% for order in orders_iam_executor %}
+                        <a href="#">{{ order.id }} {{ order.title }}</a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="col-7">

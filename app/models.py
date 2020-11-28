@@ -75,6 +75,12 @@ class User(UserMixin, db.Model):
             Config.SECRET_KEY,
             algorithm='HS256').decode('utf-8')
 
+    def get_orders_iam_creator(self):
+        return Order.query.filter(Order.creator == self.id).all()
+
+    def get_orders_iam_executor(self):
+        return Order.query.filter(Order.executors.contains(self)).all()
+
     @staticmethod
     def verify_reset_password_token(token):
         try:
@@ -136,6 +142,10 @@ class OrderComments(db.Model):
     creation_date = db.Column(db.DateTime, default=datetime.now())
     text = db.Column(db.String(2048))
 
+class OrderStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(30))
+    description = db.Column(db.String(100))
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -151,12 +161,12 @@ class Order(db.Model):
     deadline = db.Column(db.DateTime)
     done = db.Column(db.Boolean, default=False)
     reactions = db.Column(db.JSON, default={})
-    status = db.Column()
+    status = db.Column(db.Integer, db.ForeignKey('order_status.id'), default=1)
     executors = db.relationship('User',
                                 secondary=order_executor,
                                 lazy='subquery',
                                 backref=db.backref('executors', lazy=True))
 
-
     def get_comments(self):
         return OrderComments.query.filter(OrderComments.order == self.id).order_by(OrderComments.creation_date).all()
+

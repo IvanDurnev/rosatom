@@ -29,9 +29,15 @@
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                     <p>
-                        <button id="rec_btn" class="btn btn-danger">Record</button>
-                        <button id="stop_btn" class="btn btn-primary">Stop record</button>
+                        <button id="rec_btn" class="btn btn-danger">Записать голос</button>
+                        <button id="stop_btn" class="btn btn-primary">Остановить запись</button>
                     </p>
+
+                    {{ create_order_form.file.label(class='mb-0 mt-2') }}
+                    {{ create_order_form.file(class='col-sm-12 form-control') }}
+                    {% for error in create_order_form.file.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
 
                     {{ create_order_form.priority.label(class='mb-0 mt-2') }}
                     {{ create_order_form.priority(type="range", min="1", max="3", size=32, class='task-priority col-sm-12 form-control') }}
@@ -64,6 +70,11 @@
                     {% for error in create_order_form.executors.errors %}
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
+
+                    <div class="row">
+                        <p>Поля ответа</p>
+                        <a class="btn btn-info">+</a>
+                    </div>
 
                     {{ create_order_form.submit(class="form-control btn btn-success mt-5") }}
                 </form>
