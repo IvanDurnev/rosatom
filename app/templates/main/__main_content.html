@@ -79,7 +79,7 @@
 
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-tasks-executor" role="tabpanel" aria-labelledby="pills-tasks-tab-executor">
-                            {% for order in orders_iam_executor %}
+                            {% for order in list(reversed(orders_iam_executor)) %}
                                 {% if order.reactions %}
                                     <div class="card">
                                         <div class="card-body">
@@ -155,7 +155,7 @@
 
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-tasks-creator" role="tabpanel" aria-labelledby="pills-tasks-tab-creator">
-                            {% for order in orders_iam_creator %}
+                            {% for order in list(reversed(orders_iam_creator)) %}
                                 {% if order.reactions %}
                                     <div class="card">
                                         <div class="card-body">
@@ -219,7 +219,7 @@
 
                 <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="send-tab">
                     <ul>
-                        {% for note in current_user.get_notes() %}
+                        {% for note in list(reversed(current_user.get_notes())) %}
                             <li>
                                 <div class="card">
                                     <div class="card-body">

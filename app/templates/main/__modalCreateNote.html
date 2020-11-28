@@ -13,11 +13,11 @@
                     {{ create_note_form.hidden_tag() }}
 
                     {{ create_note_form.text.label(class='mb-0 mt-2') }}
-                    {{ create_note_form.text(size=32, class='col-sm-12 form-control', type='text', placeholder='Текст заметки') }}
+                    {{ create_note_form.text(size=32, id='voicenote', rec='false', class='col-sm-12 form-control', type='text', placeholder='Текст заметки') }}
                     {% for error in create_note_form.text.errors %}
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
-
+                    <button type="button" onclick="event.preventDefault(); note_btn_voice()" class="form-control btn btn-success mt-5" id='voicenote_btn'>Записать аудио</button>
                     {{ create_order_form.submit(class="form-control btn btn-success mt-5") }}
                 </form>
             </div>
@@ -27,6 +27,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    function note_btn_voice () {
+        thisbtn = document.getElementById('voicenote_btn')
+        if (document.getElementById('voicenote').getAttribute('rec') == 'false') {
+            start_rec();
+            thisbtn.classList.add('btn-danger')
+            thisbtn.classList.remove('btn-success')
+            thisbtn.innerHTML = 'Остановить запись'
+            document.getElementById('voicenote').setAttribute('rec', 'true')
+        } else {            
+            document.getElementById('voicenote').setAttribute('rec', 'false')
+            thisbtn.classList.remove('btn-danger')
+            thisbtn.classList.add('btn-success')
+            thisbtn.innerHTML = 'Записать аудио'
+            voice_input(document.getElementById('voicenote'), stop_rec())
+        }
+    }
+</script>
+
 {#<script>#}
 {#    let rec = $('#rec_btn')#}
 {#    let stop = $('#stop_btn')#}

@@ -1,7 +1,7 @@
 from telegram import chat
 from telegram import user
 from app import db, bot
-from app.models import User, MainMenuItems
+from app.models import User, MainMenuItems, Note
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from app.telegram_bot import texts
 from app import Config
@@ -9,6 +9,10 @@ from telegram import ParseMode
 import json
 import math
 import dialogflow_v2 as dialogflow
+import speech_recognition as sr
+import random
+import os
+import subprocess
 
 
 def command_start(update, context):
@@ -82,7 +86,31 @@ def photo_message(update, context):
 
 
 def audio_message(update, context):
-    pass
+    from app import create_app
+    app = create_app(config_class=Config)
+    app.app_context().push()
+
+    audio = update.message.voice.get_file()
+    audio = audio.download_as_bytearray()
+    rand = str(random.randint(100000,1000000))
+    filename =  rand+"note.ogg"
+    with open(os.path.join(Config.UPLOAD_FOLDER, filename), 'wb') as f:
+        f.write(audio)
+    subprocess.run(['ffmpeg', '-i', os.path.join(Config.UPLOAD_FOLDER, filename), os.path.join(Config.UPLOAD_FOLDER, filename.replace('ogg', 'wav'))])
+    with sr.AudioFile(os.path.join(Config.UPLOAD_FOLDER, filename.replace('ogg', 'wav'))) as s:
+        r = sr.Recognizer()
+        txt = r.listen(s)
+        text = r.recognize_google(txt, language = 'ru-RU')
+        note = Note()
+        note.text = text
+        note.sound_file = filename
+        note.creator = User.query.filter_by(tg_id=update.message.chat_id).first().id
+        db.session.add(note)
+        db.session.commit()
+        bot.send_message(
+            chat_id=update.message.chat_id,
+            text=f"Заметка сохранена"
+        )
 
 
 def inline_buttons_handler(update, context):

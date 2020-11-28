@@ -164,8 +164,11 @@
             xhr.open("POST", "/recognize_file", true)
             xhr.onload = function () {
                 j = JSON.parse(xhr.responseText)
-                object.value = j.stt
-                object.innerHTML = j.stt
+                try {
+                    object.value = j.stt
+                } catch {
+                    object.innerText = j.stt
+                }
             }
             xhr.send(data)
         }, 500)
