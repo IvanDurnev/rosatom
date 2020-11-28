@@ -21,7 +21,14 @@
 
 {%if derived_orders%}
 <h3>Декомпозированные задачи</h3>
+<h4>Статус выполнения</h4>
+<div class="progress" style="height: 20px;">
+    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{orders_stats['ready']/orders_stats['total']*100}}%;" aria-valuenow="{{orders_stats['ready']}}" aria-valuemin="0" aria-valuemax="{{orders_stats['total']}}"></div>
+
+</div>
+  <br>
 {%for i in derived_orders%}
+
 <div class="card">
     <div class="card-body">
         <p class="badge None">{{i.get_status().title}}</p>
@@ -53,10 +60,29 @@
 
     <form class="mt-5" onsubmit="sendComment({{ order.id }}, {{ current_user.id }});">
         <p class="mb-0">Добавить комментарий</p>
-        <input class="form-control" type="text">
+        <input class="form-control" id='comment_field' type="text"> <button class="btn btn-success" type="button" id='voicecomment' rec='false' onclick="event.preventDefault(); cmt_btn_voice()">Записать аудио</button>
         <button class="btn btn-info" type="submit">Добавить</button>
     </form>
 </div>
+
+<script>
+    function cmt_btn_voice () {
+        thisbtn = document.getElementById('voicecomment')
+        if (document.getElementById('voicecomment').getAttribute('rec') == 'false') {
+            start_rec();
+            thisbtn.classList.add('btn-danger')
+            thisbtn.classList.remove('btn-success')
+            thisbtn.innerHTML = 'Остановить запись'
+            document.getElementById('voicecomment').setAttribute('rec', 'true')
+        } else {            
+            document.getElementById('voicecomment').setAttribute('rec', 'false')
+            thisbtn.classList.remove('btn-danger')
+            thisbtn.classList.add('btn-success')
+            thisbtn.innerHTML = 'Записать аудио'
+            voice_input(document.getElementById('comment_field'), stop_rec())
+        }
+    }
+</script>
 
 <style>
     .comments-area {

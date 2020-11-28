@@ -132,10 +132,15 @@ def get_note(note_id):
 def get_order(order_id):
     comments = OrderComments.query.filter(OrderComments.order == order_id).order_by(OrderComments.creation_date).all()
     derived_orders=Order.query.filter_by(base_order=order_id).all()
+    if len(derived_orders) > 0:
+        orders_stats = {"ready": len(Order.query.filter_by(base_order=order_id, done=True).all()), "total": len(derived_orders)}
+    else:
+        orders_stats = {}
     return render_template('main/__orderData.html',
                            order=Order.query.get(order_id),
                            comments=comments,
-                           derived_orders=derived_orders)
+                           derived_orders=derived_orders,
+                           orders_stats=orders_stats)
 
 
 @bp.route('/send_comment', methods=['POST'])
