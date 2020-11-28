@@ -17,9 +17,31 @@
 <p>Приоритет {{ order.priority }}</p>
 <p>Дэдлайн {{ order.deadline.strftime('%d.%m.%y %H:%M:%S') }}</p>
 
-
-
 <a class="btn btn-success" onclick="decompose('{{order.id}}')">Создать поручение на основании данного</a>
+
+{%if derived_orders%}
+<h3>Декомпозированные задачи</h3>
+{%for i in derived_orders%}
+<div class="card">
+    <div class="card-body">
+        <p class="badge None">{{i.get_status().title}}</p>
+        <div class="input-group">
+            <div class="form-check">
+                
+                    <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="False" aria-label="...">
+                
+            </div>
+            <a href="#" onclick="get_order({{i.id}})"><h4 class="card-title">{{i.title}}</h4></a>
+            <br>
+            <div class="card-text">
+                <span class="">Срок выполнения {{i.deadline}}</span>
+                <p class=""><span>Автор: {{i.get_creator()}} </span></p>
+            </div>
+        </div>
+    </div>
+</div>
+{%endfor%}
+{%endif%}
 
 <div class="comments-area">
     <h4>Комментарии:</h4>

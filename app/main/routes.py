@@ -131,9 +131,11 @@ def get_note(note_id):
 @bp.route('/get_order_<order_id>', methods=['GET'])
 def get_order(order_id):
     comments = OrderComments.query.filter(OrderComments.order == order_id).order_by(OrderComments.creation_date).all()
+    derived_orders=Order.query.filter_by(base_order=order_id).all()
     return render_template('main/__orderData.html',
                            order=Order.query.get(order_id),
-                           comments=comments)
+                           comments=comments,
+                           derived_orders=derived_orders)
 
 
 @bp.route('/send_comment', methods=['POST'])
