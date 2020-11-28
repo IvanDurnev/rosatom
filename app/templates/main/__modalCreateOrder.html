@@ -103,7 +103,7 @@
 <script>
     preset_dict = {'text': "Текстовое поле",
                    'checkbox': "Чекбокс",
-                   'file': "Файл"}
+                   'file': "Поле загрузки файла"}
     function apply_preset() {
         xhr = new XMLHttpRequest()
         xhr.open("GET", "/get_preset/"+document.getElementById('presetselector').value, true)
@@ -113,7 +113,10 @@
             counter = 0
             data = JSON.parse(xhr.responseText)
             for (i in data) {
-                pf.append(`<div class="p-2"><span class="mr-2">${preset_dict[data[i].type]}</span><input id='preset_field_${counter}' type='${data[i].type}' value='${data[i].name}'></input></div>`)
+                pf.append(`<div class="p-2">
+                    <span class="mr-2">${preset_dict[data[i].type]}</span>
+                    <input type='text' name='preset_field_${counter}_${data[i].type}' value='${data[i].name}' placeholder='Название'></input>
+            </div>`)
                 counter++
             }
         }
