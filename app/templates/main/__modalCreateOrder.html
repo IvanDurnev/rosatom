@@ -163,7 +163,9 @@
             xhr = new XMLHttpRequest();
             xhr.open("POST", "/recognize_file", true)
             xhr.onload = function () {
-                
+                j = JSON.parse(xhr.responseText)
+                object.value = j.stt
+                object.innerHTML = j.stt
             }
             xhr.send(data)
         }, 500)
