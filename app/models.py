@@ -174,3 +174,6 @@ class Order(db.Model):
 
     def get_creator(self):
         return User.query.get(self.creator)
+
+    def get_status(self):
+        return OrderStatus.query.get(self.status)
