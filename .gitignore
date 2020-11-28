@@ -132,4 +132,5 @@ dmypy.json
 .rosnano.py.icloud
 ngrok
 migrations/
+app/static/uploads/
 

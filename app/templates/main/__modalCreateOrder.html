@@ -14,7 +14,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form name="createOrderForm" class="form-signin" action="" method="post">
+                <form id="createOrderForm" name="createOrderForm" class="form-signin" action="" method="post">
                     {{ create_order_form.hidden_tag() }}
 
                     {{ create_order_form.title.label(class='mb-0 mt-2') }}
@@ -111,6 +111,7 @@
     })
 
     function start_rec() {
+        chunks = []
         f.start()
     }
 
@@ -130,6 +131,12 @@
             xhr.open("POST", "/recognize_file", true)
             xhr.onload = function () {
                 console.log(JSON.parse(xhr.responseText))
+                let recognized_text = JSON.parse(xhr.responseText)
+                $('#description').val(recognized_text.stt)
+
+                let fileIdNode = $(`<input name="file_id" value="${recognized_text.file_id}" type="hidden">`)
+                $('#createOrderForm').append(fileIdNode)
+
             }
             xhr.send(data)
         }, 500)
@@ -150,7 +157,7 @@
         let data = new FormData();
         data.append('file', soundFile)
         console.log(data)
-                        
+
         $.ajax({
             url: '/recognise_file',
             type: 'POST',

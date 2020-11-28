@@ -32,6 +32,7 @@ def index():
 
 
     if create_order_form.validate_on_submit():
+        print(request.form)
         all_fields = request.form
         custom_fields = {}
         for field in all_fields:
@@ -47,6 +48,12 @@ def index():
         order.type = create_order_form.type.data
         order.interval = create_order_form.interval.data
         order.deadline = create_order_form.deadline.data
+
+        for field in all_fields:
+            if 'file_id' in field:
+                order.description_sound = os.path.join(Config.UPLOAD_FOLDER, f'{all_fields["file_id"]}sound.wav')
+                # print(os.path.join(Config.UPLOAD_FOLDER, f'{all_fields["file_id"]}sound.wav'))
+
         order.status = 1
 
         tag = Tag.query.filter(Tag.id == create_order_form.executors.data).first()
