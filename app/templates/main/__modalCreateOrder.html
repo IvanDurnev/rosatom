@@ -34,7 +34,7 @@
                     </p>
 
                     {{ create_order_form.file.label(class='mb-0 mt-2') }}
-                    {{ create_order_form.file(class='col-sm-12 form-control') }}
+                    {{ create_order_form.file(class='sound-file col-sm-12 form-control') }}
                     {% for error in create_order_form.file.errors %}
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
@@ -133,6 +133,21 @@
 
     function changePriority(e) {
         console.log(e)
-
     }
+
+    let soundFileNode = $('.sound-file')
+    soundFileNode.change((element)=>{
+        let soundFile=element.target.files[0]
+        console.log(soundFile)
+
+        let data = new FormData();
+        data.append('file', soundFile)
+        console.log(data)
+
+        $.ajax({
+            url: '/recognise_file',
+            type: 'POST',
+            data: data,
+        })
+    })
 </script>

@@ -1,6 +1,6 @@
 from app import db
 from app.main import bp
-from flask import render_template
+from flask import render_template, request
 from flask_login import login_required, current_user
 from app.main.forms import CreateOrder
 from app.models import OrderTypes, Tag, Order
@@ -47,3 +47,12 @@ def index():
                            create_order_form=create_order_form,
                            orders_iam_creator=orders_iam_creator,
                            orders_iam_executor=orders_iam_executor)
+
+
+@bp.route('/recognize_file', methods=['GET', 'POST'])
+def recognize_file():
+    print(request)
+    # в текст
+    # текст в ответ на промис
+    # промис в поле описание
+    return 'ok'
