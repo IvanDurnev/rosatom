@@ -125,41 +125,33 @@
                 </div>
 
                 <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="send-tab">
-                    {% for note in current_user.get_notes() %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="input-group">
-{#                                    <h4 class="card-title">{{ order.title }}</h4>#}
-                                    <div class="card-text">
-                                        <p style="overflow: hidden; text-overflow: ellipsis; max-height: 100px;">{{ note.text }}</p>
-                                        <span class="small">Дата создания: {{ note.creation_date }}</span>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        {% for note in current_user.get_notes() %}
+                            <li class="nav-item" role="presentation">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="input-group">
+        {#                                    <h4 class="card-title">{{ order.title }}</h4>#}
+                                            <div class="card-text">
+                                                <p style="overflow: hidden; text-overflow: ellipsis; max-height: 100px;">{{ note.text }}</p>
+                                                <span class="small">Дата создания: {{ note.creation_date }}</span>
+                                            </div>
+                                            <a class="nav-link" id="nav-note-{{ note.id }}-tab" data-toggle="tab" href="#note-{{ note.id }}" role="tab" aria-controls="note-{{ note.id }}" aria-selected="true">Подробно</a>
+                                        </div>
                                     </div>
-                                    <a href="#">Подробнее</a>
                                 </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-            <div class="col-lg-7">
-{#            <h2 class="card-title">Провести инструктаж </h2>#}
-{#            <h4 class="card-subtitle">Провести инструктаж </h4>#}
-{#            <div class="card-title">#}
-{#                Таким образом дальнейшее развитие различных форм деятельности представляет собой интересный эксперимент проверки соответствующий условий активизации. Повседневная практика показывает, что постоянное информационно-пропагандистское обеспечение нашей деятельности позволяет оценить значение систем массового участия. Идейные соображения высшего порядка, а также консультация с широким активом в значительной степени обуславливает создание соответствующий условий активизации.#}
-{#            </div>#}
-{##}
-{#            <h3>Срок выполнения 29.11.2020</h3>#}
-{#            <form action="">#}
-{#                <div class="form-group">#}
-{#                    <label for="exampleFormControlTextarea1">Комментарий</label>#}
-{#                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>#}
-{#                    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>#}
-{#                </div>#}
-{#            </form>#}
-{##}
-{#            <span>#}
-{#                28.11.2020 Иван Иванович Иванов#}
-{#            </span>#}
+        </div>
+
+        <div class="col-lg-7">
+            <div class="tab-content">
+                {% for note in current_user.get_notes() %}
+                    <div class="tab-pane" id="note-{{ note.id }}" role="tabpanel" aria-labelledby="nav-note-{{ note.id }}-tab">{{ note.text }}</div>
+                {% endfor %}
             </div>
         </div>
     </div>
