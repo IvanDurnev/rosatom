@@ -71,9 +71,13 @@
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
 
-                    <div class="row">
+                    <div class="row p-3">
                         <p>Поля ответа</p>
-                        <a class="btn btn-info">+</a>
+                        <select>
+                            <option>Чекбокс</option>
+                            <option>Текст</option>
+                            <option>Файл</option>
+                        </select>
                     </div>
 
                     {{ create_order_form.submit(class="form-control btn btn-success mt-5") }}
@@ -150,4 +154,9 @@
             data: data,
         })
     })
+</script>
+
+<script>
+{# конструктор кастомных ответов на задачу #}
+
 </script>

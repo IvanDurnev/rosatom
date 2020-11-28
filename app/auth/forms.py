@@ -18,7 +18,7 @@ class RegistrationForm(FlaskForm):
     # last_name = StringField('Фамилия')
     email = EmailField('E-mail', validators=[DataRequired()])
     phone = TelField('Телефон', validators=[DataRequired()])
-    # group = SelectField('Группа')
+    group = SelectField('Группа')
     # password = PasswordField('Пароль', validators=[DataRequired()])
     # password2 = PasswordField('Повторите пароль', validators=[DataRequired(), EqualTo('password', message='Пароли не совпадают')])
     tg_id = StringField('TG id')
