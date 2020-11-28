@@ -177,3 +177,9 @@ class Order(db.Model):
 
     def get_status(self):
         return OrderStatus.query.get(self.status)
+
+
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    text = db.Column(db.String(4096))
+    sound_file = db.Column(db.String(1024))
