@@ -29,15 +29,17 @@
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                     <p>
-                        <button id="rec_btn" class="btn btn-danger">Записать голос</button>
-                        <button id="stop_btn" class="btn btn-primary">Остановить запись</button>
+                        <button id="rec_btn" onclick="event.preventDefault()" class="btn btn-danger">Записать голос</button>
+                        <button id="stop_btn" onclick="event.preventDefault()" class="btn btn-primary">Остановить запись</button>
                     </p>
 
-                    {{ create_order_form.file.label(class='mb-0 mt-2') }}
-                    {{ create_order_form.file(class='sound-file col-sm-12 form-control') }}
-                    {% for error in create_order_form.file.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
+                    {# used to be file upload
+                        {{ create_order_form.file.label(class='mb-0 mt-2') }}
+                        {{ create_order_form.file(class='sound-file col-sm-12 form-control') }}
+                        {% for error in create_order_form.file.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    #}
 
                     {{ create_order_form.priority.label(class='mb-0 mt-2') }}
                     {{ create_order_form.priority(type="range", min="1", max="3", size=32, class='task-priority col-sm-12 form-control') }}
@@ -121,14 +123,14 @@
 
     function dl(stream) {
         var fobj
-        setTimeout(function () {
+        return setTimeout(function () {
             fobj = new Blob([stream[0]], { type: "application/octet-stream" })
             obj = window.URL.createObjectURL(fobj);
-
-            a = document.createElement('a')
-            a.download = "sound.ogg"
-            a.href = obj
-            a.click()
+            let data = new FormData();
+            data.append('audio', fobj, "sound.ogg")
+            xhr = new XMLHttpRequest();
+            xhr.open("POST", "/recognize_file", true)
+            xhr.send(data)
         }, 500)
     }
 
@@ -147,7 +149,7 @@
         let data = new FormData();
         data.append('file', soundFile)
         console.log(data)
-
+                        
         $.ajax({
             url: '/recognise_file',
             type: 'POST',

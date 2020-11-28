@@ -4,6 +4,12 @@ from flask import render_template, request
 from flask_login import login_required, current_user
 from app.main.forms import CreateOrder
 from app.models import OrderTypes, Tag, Order
+from werkzeug.utils import secure_filename
+from config import Config
+import os
+import subprocess
+import random
+import speech_recognition as sr
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -51,8 +57,15 @@ def index():
 
 @bp.route('/recognize_file', methods=['GET', 'POST'])
 def recognize_file():
-    print(request)
-    # в текст
-    # текст в ответ на промис
-    # промис в поле описание
-    return 'ok'
+    if request.method == 'POST':
+        # print(request.files)
+        voice_rec = request.files['audio'] # надо взять аудиофайл из POST запроса
+        rand = str(random.randint(100000,1000000))
+        filename =  rand + secure_filename(voice_rec.filename)
+        voice_rec.save(os.path.join(Config.UPLOAD_FOLDER, filename))
+        subprocess.run(['ffmpeg', '-i', os.path.join(Config.UPLOAD_FOLDER, filename), os.path.join(Config.UPLOAD_FOLDER, filename.replace('ogg', 'wav'))])
+        with sr.AudioFile(os.path.join(Config.UPLOAD_FOLDER, filename.replace('ogg', 'wav'))) as s:
+            r = sr.Recognizer()
+            txt = r.listen(s)
+            text = r.recognize_google(txt, language = 'ru-RU')
+            return {'stt': text, 'file_id': rand}
