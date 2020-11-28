@@ -42,6 +42,7 @@ def index():
 
         order = Order()
         order.creator = current_user.id
+        order.base_order = create_order_form.baseorder.data
         order.title = create_order_form.title.data
         order.description = create_order_form.description.data
         order.description_sound = create_order_form.file.data

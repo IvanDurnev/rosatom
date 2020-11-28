@@ -232,7 +232,7 @@
             a.click()
             j = JSON.parse(xhr.responseText)
             console.log(j)
-            $("#createOrderForm").add(`<input type='hidden' name='parent_node' value='${j.id}'></input>`)
+            $("#createOrderForm").append(`<input type='hidden' name='baseorder' value='${j.id}'></input>`)
             $("#title").val(j.title)
             $('#description').val(j.description)
             $('#type').val(j.type)
