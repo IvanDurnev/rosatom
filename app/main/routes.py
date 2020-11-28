@@ -110,3 +110,9 @@ def recognize_file():
             txt = r.listen(s)
             text = r.recognize_google(txt, language = 'ru-RU')
             return jsonify({'stt': text, 'file_id': int(rand)})
+
+
+@bp.route('/get_note_<note_id>', methods=['GET'])
+def get_note(note_id):
+    return render_template('main/__noteData.html',
+                           note = Note.query.get(note_id))
