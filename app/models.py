@@ -177,3 +177,21 @@ class Order(db.Model):
 
     def get_status(self):
         return OrderStatus.query.get(self.status)
+        
+class CustomInputs(db.Model):
+    """
+    Structure
+    [
+        {
+            "name": string,
+            "type": enum one of (checkbox|file|text)
+        }
+    ]
+
+    Example
+        [{"name": "I am pony", "type": "checkbox"}]
+    """
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    preset_name = db.Column(db.String(64), nullable=False)
+    preset = db.Column(db.JSON, default=[])

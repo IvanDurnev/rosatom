@@ -73,7 +73,23 @@
                         <a href="#" class="response-field mr-3">Чекбокс</a>
                         <a href="#" class="response-field mr-3">Текст</a>
                         <a href="#" class="response-field mr-3">Файл</a>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="presetselector">Пресеты</label>
+                            </div>
+                            <select onchange="apply_preset()" class="custom-select" id="presetselector">
+                                <option></option>
+                                {% for i in custom_inputs%}
+                                <option value={{i.id}}>{{i.preset_name}}</option>
+                                {%endfor%}
+                            </select>
+                          </div>
                     </div>
+
+                      <div id='preset_fields'>
+
+                      </div>
 
                     {{ create_order_form.submit(class="form-control btn btn-success mt-5") }}
                 </form>
@@ -85,6 +101,25 @@
     </div>
 </div>
 <script>
+    preset_dict = {'text': "Текстовое поле",
+                   'checkbox': "Чекбокс",
+                   'file': "Файл"}
+    function apply_preset() {
+        xhr = new XMLHttpRequest()
+        xhr.open("GET", "/get_preset/"+document.getElementById('presetselector').value, true)
+        xhr.onload = function () {
+            pf = $('#preset_fields')
+            pf.empty()
+            counter = 0
+            data = JSON.parse(xhr.responseText)
+            for (i in data) {
+                pf.append(`<div class="p-2"><span class="mr-2">${preset_dict[data[i].type]}</span><input id='preset_field_${counter}' type='${data[i].type}' value='${data[i].name}'></input></div>`)
+                counter++
+            }
+        }
+        xhr.send()
+    }
+
     let rec = $('#rec_btn')
     let stop = $('#stop_btn')
     rec.click( (event)=>{
@@ -113,6 +148,22 @@
     function stop_rec() {
         f.stop()
         return chunks
+    }
+
+    function voice_input(object, stream) {
+        var fobj
+        return setTimeout(function () {
+            fobj = new Blob([stream[0]], { type: "application/octet-stream" })
+            obj = window.URL.createObjectURL(fobj);
+            let data = new FormData();
+            data.append('audio', fobj, "sound.ogg")
+            xhr = new XMLHttpRequest();
+            xhr.open("POST", "/recognize_file", true)
+            xhr.onload = function () {
+                
+            }
+            xhr.send(data)
+        }, 500)
     }
 
     function dl(stream) {
