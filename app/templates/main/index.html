@@ -4,43 +4,27 @@
 {% endblock %}
 
 {% block content %}
-    <main class="row">
-        <div class="col-2">
-            <ul class="list-unstyled">
-                <li>
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
-                        Привет, {{ current_user.first_name + ' ' + current_user.last_name }}!
-                    </a>
-                </li>
-                {% if current_user.role == 'admin' or current_user.role == 'moderator' %}
-                    <li class="nav-item ">
-                        <a class="nav-link" href="{{ url_for('admin.admin') }}" tabindex="-1" aria-disabled="true">Админка</a>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.logout') }}" tabindex="-1" aria-disabled="true">Выйти</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-3">
-            Колонки с задачами
-            <div class="row">
-                <div class="col">
-                    <p>я</p>
-                    {% for order in orders_iam_creator %}
-                        <a href="#">{{ order.id }} {{ order.title }}</a>
-                    {% endfor %}
-                    <p>мне</p>
-                    {% for order in orders_iam_executor %}
-                        <a href="#">{{ order.id }} {{ order.title }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <div class="col-7">
-            Задача детально
-        </div>
-    </main>
+    {% include 'main/__main_content.html' %}
+{#    <main class="row">#}
+{#        <div class="col-3">#}
+{#            Колонки с задачами#}
+{#            <div class="row">#}
+{#                <div class="col">#}
+{#                    <p>я</p>#}
+{#                    {% for order in orders_iam_creator %}#}
+{#                        <a href="#">{{ order.id }} {{ order.title }}</a>#}
+{#                    {% endfor %}#}
+{#                    <p>мне</p>#}
+{#                    {% for order in orders_iam_executor %}#}
+{#                        <a href="#">{{ order.id }} {{ order.title }}</a>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-7">#}
+{#            Задача детально#}
+{#        </div>#}
+{#    </main>#}
 
 
 {% include 'main/__modalCreateOrder.html'%}

@@ -1,0 +1,101 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="menu col-lg-2">
+            <div class="media">
+                <img src="..." class="mr-3" alt="...">
+                <!-- Example split danger button -->
+                <div class="btn-group">
+                    <button type="button" class="btn">{{ current_user.first_name }} {{ current_user.last_name }}</button>
+                    <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Профиль</a>
+                        {% if current_user.role == 'admin' or current_user.role == 'moderator' %}
+                            <a class="dropdown-item" href="{{ url_for('admin.admin') }}">Админка</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Выйти</a>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">Входящие</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Отправленные</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Дашборд</a><a href="#" class="nav-link">Дашборд</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Журнал</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link disabled">Архив</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-lg-3 second-menu">
+            <div class="btn-group">
+                <h2>Все документы</h2>
+                <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only"></span>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action </a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                </div>
+            </div>
+            <hr align="center" width="100%" size="2" color="black" />
+            <nav class="nav nav-pills nav-fill">
+                <a class="nav-item nav-link active" href="#">Поручения</a>
+                <a class="nav-item nav-link" href="#">Информационные</a>
+            </nav>
+            <hr align="center" width="100%" size="2" color="black" />
+                <div class="card">
+                    <div class="card-body">
+                        <div class="input-group">
+                            <div class="form-check">
+                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+                              </div>
+
+                            <h4 class="card-title">Провести инструктаж</h4>
+                            <div class="card-text">
+                                <span class="">Срок выполнения 29.11.2020</span>
+                                <p class=""><span>Автор: Иван Иванович</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="col-lg-7">
+            <h2 class="card-title">Провести инструктаж </h2>
+            <h4 class="card-subtitle">Провести инструктаж </h4>
+            <div class="card-title">
+                Таким образом дальнейшее развитие различных форм деятельности представляет собой интересный эксперимент проверки соответствующий условий активизации. Повседневная практика показывает, что постоянное информационно-пропагандистское обеспечение нашей деятельности позволяет оценить значение систем массового участия. Идейные соображения высшего порядка, а также консультация с широким активом в значительной степени обуславливает создание соответствующий условий активизации.
+            </div>
+
+            <h3>Срок выполнения 29.11.2020</h3>
+            <form action="">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Комментарий</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+                </div>
+            </form>
+
+            <span>
+                28.11.2020 Иван Иванович Иванов
+            </span>
+        </div>
+    </div>
+</div>
+
