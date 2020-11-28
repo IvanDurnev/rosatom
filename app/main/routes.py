@@ -1,6 +1,6 @@
 from app import db
 from app.main import bp
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify
 from flask_login import login_required, current_user
 from app.main.forms import CreateOrder
 from app.models import OrderTypes, Tag, Order
@@ -78,4 +78,4 @@ def recognize_file():
             r = sr.Recognizer()
             txt = r.listen(s)
             text = r.recognize_google(txt, language = 'ru-RU')
-            return {'stt': text, 'file_id': rand}
+            return jsonify({'stt': text, 'file_id': int(rand)})
