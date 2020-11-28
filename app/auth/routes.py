@@ -67,7 +67,7 @@ def register():
         user.role = 'user'
         user.language_code = 'ru'
         user.group = 1
-        user.set_password(form.email.data)
+        user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('Поздравляем! Вы зарегистрированы.')

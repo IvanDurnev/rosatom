@@ -15,12 +15,12 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     # username = StringField('Логин', validators=[DataRequired()])
     first_name = StringField('Имя', validators=[DataRequired()])
-    # last_name = StringField('Фамилия')
+    last_name = StringField('Фамилия')
     email = EmailField('E-mail', validators=[DataRequired()])
     phone = TelField('Телефон', validators=[DataRequired()])
-    group = SelectField('Группа')
-    # password = PasswordField('Пароль', validators=[DataRequired()])
-    # password2 = PasswordField('Повторите пароль', validators=[DataRequired(), EqualTo('password', message='Пароли не совпадают')])
+    group = SelectField('Подразделение')
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    password2 = PasswordField('Повторите пароль', validators=[DataRequired(), EqualTo('password', message='Пароли не совпадают')])
     tg_id = StringField('TG id')
     submit = SubmitField('ЗАРЕГИСТРИРОВАТЬСЯ')
 
