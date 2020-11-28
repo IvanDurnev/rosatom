@@ -99,6 +99,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="card-footer">
+                                            {% if order.done %}
+                                                <a class="btn btn-warning">Архивировать</a>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -123,6 +128,11 @@
                                                     <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            {% if order.done %}
+                                                <a class="btn btn-warning">Архивировать</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 {% endif %}
@@ -165,6 +175,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="card-footer">
+                                            {% if order.done %}
+                                                <a class="btn btn-warning">Архивировать</a>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -189,6 +204,11 @@
                                                     <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            {% if order.done %}
+                                                <a class="btn btn-warning">Архивировать</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 {% endif %}
