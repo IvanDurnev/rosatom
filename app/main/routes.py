@@ -133,3 +133,21 @@ def get_order(order_id):
     return render_template('main/__orderData.html',
                            order=Order.query.get(order_id),
                            comments=comments)
+
+
+@bp.route('/send_comment', methods=['POST'])
+def send_comment():
+    data = request.form
+    order_id = data['order']
+    user_id = data['user']
+    text = data['text']
+
+    comment = OrderComments()
+    comment.user = user_id
+    comment.order = order_id
+    comment.text = text
+
+    db.session.add(comment)
+    db.session.commit()
+
+    return 'ok'
