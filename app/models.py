@@ -142,10 +142,12 @@ class OrderComments(db.Model):
     creation_date = db.Column(db.DateTime, default=datetime.now())
     text = db.Column(db.String(2048))
 
+
 class OrderStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(30))
     description = db.Column(db.String(100))
+
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -170,3 +172,5 @@ class Order(db.Model):
     def get_comments(self):
         return OrderComments.query.filter(OrderComments.order == self.id).order_by(OrderComments.creation_date).all()
 
+    def get_creator(self):
+        return User.query.get(self.creator)

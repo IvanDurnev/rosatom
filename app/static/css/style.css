@@ -1,9 +1,14 @@
+*{
+    box-sizing: border-box;
+}
+
 .menu{
     background-color: #393939;
+    min-height: 100vh;
 }
 
 .btn{
-color: white !important;
+    color: white !important;
 }
 
 .second-menu{

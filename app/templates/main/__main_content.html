@@ -1,9 +1,8 @@
-<div class="container-fluid">
+<div class="main-container container-fluid">
     <div class="row">
         <div class="menu col-lg-2">
-            <div class="media">
-                <img src="..." class="mr-3" alt="...">
-                <!-- Example split danger button -->
+            <div class="media mb-3">
+            <img src="{{ url_for('static', filename='images/favicon.png') }}" class="mr-3" alt="...">
                 <div class="btn-group">
                     <button type="button" class="btn">{{ current_user.first_name }} {{ current_user.last_name }}</button>
                     <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -20,21 +19,24 @@
                 </div>
             </div>
 
-            <ul class="nav flex-column">
+            <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">Входящие</a>
+                    <a href="#income" class="nav-link active" id="v-pills-home-tab" data-toggle="pill" role="tab" aria-controls="v-pills-home" aria-selected="true">Входящие</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Отправленные</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#send" role="tab" aria-controls="send" aria-selected="false">Отправленные</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Дашборд</a><a href="#" class="nav-link">Дашборд</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Дашборд</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Журнал</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Журнал</a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link disabled">Архив</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Архив</a>
+                </li>
+                <li>
+                    <a class="nav-link" data-toggle="modal" data-target="#exampleModal">Создать задачу</a>
                 </li>
             </ul>
         </div>
@@ -60,41 +62,64 @@
                 <a class="nav-item nav-link" href="#">Информационные</a>
             </nav>
             <hr align="center" width="100%" size="2" color="black" />
-                <div class="card">
-                    <div class="card-body">
-                        <div class="input-group">
-                            <div class="form-check">
-                                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
-                              </div>
-
-                            <h4 class="card-title">Провести инструктаж</h4>
-                            <div class="card-text">
-                                <span class="">Срок выполнения 29.11.2020</span>
-                                <p class=""><span>Автор: Иван Иванович</span></p>
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="income" role="tabpanel" aria-labelledby="income-tab">
+                    {% for order in orders_iam_executor %}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">
+                                    </div>
+                                    <h4 class="card-title">{{ order.title }}</h4>
+                                    <div class="card-text">
+                                        <span class="">Срок выполнения {{ order.deadline }}</span>
+                                        <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
-        </div>
-        <div class="col-lg-7">
-            <h2 class="card-title">Провести инструктаж </h2>
-            <h4 class="card-subtitle">Провести инструктаж </h4>
-            <div class="card-title">
-                Таким образом дальнейшее развитие различных форм деятельности представляет собой интересный эксперимент проверки соответствующий условий активизации. Повседневная практика показывает, что постоянное информационно-пропагандистское обеспечение нашей деятельности позволяет оценить значение систем массового участия. Идейные соображения высшего порядка, а также консультация с широким активом в значительной степени обуславливает создание соответствующий условий активизации.
+
+                <div class="tab-pane fade" id="send" role="tabpanel" aria-labelledby="send-tab">
+                    {% for order in orders_iam_creator %}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="{{ order.done }}" aria-label="...">
+                                    </div>
+                                    <h4 class="card-title">{{ order.title }}</h4>
+                                    <div class="card-text">
+                                        <span class="">Срок выполнения {{ order.deadline }}</span>
+                                        <p class=""><span>Автор: {{ order.get_creator().first_name }} {{ order.get_creator().last_name }}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-
-            <h3>Срок выполнения 29.11.2020</h3>
-            <form action="">
-                <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Комментарий</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
-                </div>
-            </form>
-
-            <span>
-                28.11.2020 Иван Иванович Иванов
-            </span>
+        <div class="col-lg-7">
+{#            <h2 class="card-title">Провести инструктаж </h2>#}
+{#            <h4 class="card-subtitle">Провести инструктаж </h4>#}
+{#            <div class="card-title">#}
+{#                Таким образом дальнейшее развитие различных форм деятельности представляет собой интересный эксперимент проверки соответствующий условий активизации. Повседневная практика показывает, что постоянное информационно-пропагандистское обеспечение нашей деятельности позволяет оценить значение систем массового участия. Идейные соображения высшего порядка, а также консультация с широким активом в значительной степени обуславливает создание соответствующий условий активизации.#}
+{#            </div>#}
+{##}
+{#            <h3>Срок выполнения 29.11.2020</h3>#}
+{#            <form action="">#}
+{#                <div class="form-group">#}
+{#                    <label for="exampleFormControlTextarea1">Комментарий</label>#}
+{#                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>#}
+{#                    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>#}
+{#                </div>#}
+{#            </form>#}
+{##}
+{#            <span>#}
+{#                28.11.2020 Иван Иванович Иванов#}
+{#            </span>#}
         </div>
     </div>
 </div>

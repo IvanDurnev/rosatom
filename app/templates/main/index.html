@@ -4,13 +4,11 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'main/__main_content.html' %}
-{#    <main class="row">#}
-{#        <div class="col-3">#}
-{#            Колонки с задачами#}
-{#            <div class="row">#}
-{#                <div class="col">#}
-{#                    <p>я</p>#}
+    <main>
+        {% include 'main/__main_content.html' %}
+    </main>
+
+
 {#                    {% for order in orders_iam_creator %}#}
 {#                        <a href="#">{{ order.id }} {{ order.title }}</a>#}
 {#                    {% endfor %}#}
@@ -18,16 +16,8 @@
 {#                    {% for order in orders_iam_executor %}#}
 {#                        <a href="#">{{ order.id }} {{ order.title }}</a>#}
 {#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="col-7">#}
-{#            Задача детально#}
-{#        </div>#}
-{#    </main>#}
 
-
-{% include 'main/__modalCreateOrder.html'%}
+    {% include 'main/__modalCreateOrder.html'%}
 {% endblock %}
 
 {% block scripts %}
