@@ -7,6 +7,7 @@ from datetime import datetime
 class CreateOrder(FlaskForm):
     title = StringField(label='Название', validators=[DataRequired()])
     description = TextAreaField(label='Описание', validators=[DataRequired()])
+    baseorder = IntegerField()
     file = FileField(label='Подгрузить файл')
     priority = IntegerField(label='Приоритет', default=1)
     type = SelectField(label='Тип задачи', choices=[])
