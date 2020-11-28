@@ -3,7 +3,7 @@ from app.main import bp
 from flask import render_template, request, redirect, jsonify
 from flask_login import login_required, current_user
 from app.main.forms import CreateOrder, CreateNote
-from app.models import OrderTypes, Tag, Order, CustomInputs, Note
+from app.models import OrderTypes, Tag, Order, CustomInputs, Note, OrderComments
 from werkzeug.utils import secure_filename
 from config import Config
 import os
@@ -120,5 +120,7 @@ def get_note(note_id):
 
 @bp.route('/get_order_<order_id>', methods=['GET'])
 def get_order(order_id):
+    comments = OrderComments.query.filter(OrderComments.order == order_id).order_by(OrderComments.creation_date).all()
     return render_template('main/__orderData.html',
-                           order = Order.query.get(order_id))
+                           order=Order.query.get(order_id),
+                           comments=comments)

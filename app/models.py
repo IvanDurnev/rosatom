@@ -101,7 +101,7 @@ class User(UserMixin, db.Model):
 
 
     def __repr__(self):
-        return f'{self.first_name}'
+        return f'{self.first_name} {self.last_name}'
 
 
 class Group(db.Model):
@@ -145,6 +145,9 @@ class OrderComments(db.Model):
     creation_date = db.Column(db.DateTime, default=datetime.now())
     text = db.Column(db.String(2048))
 
+    def get_user(self):
+        return User.query.get(self.user)
+
 
 class OrderStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -180,7 +183,7 @@ class Order(db.Model):
 
     def get_status(self):
         return OrderStatus.query.get(self.status)
-      
+
 class CustomInputs(db.Model):
     """
     Structure
@@ -198,7 +201,7 @@ class CustomInputs(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     preset_name = db.Column(db.String(64), nullable=False)
     preset = db.Column(db.JSON, default=[])
-    
+
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     text = db.Column(db.String(4096))
