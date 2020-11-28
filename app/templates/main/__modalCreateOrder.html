@@ -14,7 +14,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form class="form-signin" action="" method="post">
+                <form name="createOrderForm" class="form-signin" action="" method="post">
                     {{ create_order_form.hidden_tag() }}
 
                     {{ create_order_form.title.label(class='mb-0 mt-2') }}
@@ -73,13 +73,11 @@
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
 
-                    <div class="row p-3">
-                        <p>Поля ответа</p>
-                        <select>
-                            <option>Чекбокс</option>
-                            <option>Текст</option>
-                            <option>Файл</option>
-                        </select>
+                    <div class="p-3 response-fields">
+                        <p>Добавить поля ответа</p>
+                        <a href="#" class="response-field mr-3">Чекбокс</a>
+                        <a href="#" class="response-field mr-3">Текст</a>
+                        <a href="#" class="response-field mr-3">Файл</a>
                     </div>
 
                     {{ create_order_form.submit(class="form-control btn btn-success mt-5") }}
@@ -160,5 +158,33 @@
 
 <script>
 {# конструктор кастомных ответов на задачу #}
+let responseFields = $('.response-field')
+responseFields.click((el)=>{
+    let responseNode;
+    let responseDescription;
+    let responseData;
 
+    let fieldsCount =  $('.response-fields').find('*').length
+    console.log(fieldsCount)
+
+    if (el.target.text == 'Текст') {
+        responseNode = $('<div class="p-2"></div>')
+        responseDescription = $('<span class="mr-2">Текстовое поле</span>')
+        responseData = $(`<input name="text-field-${fieldsCount}" type="text" placeholder="Название">`)
+    }
+    if (el.target.text == 'Чекбокс') {
+        responseNode = $('<div class="p-2"></div>')
+        responseDescription = $('<span class="mr-2">Чекбокс</span>')
+        responseData = $(`<input name="checkbox-field-${fieldsCount}" type="text" placeholder="Название">`)
+    }
+    if (el.target.text == 'Файл') {
+        responseNode = $('<div class="p-2"></div>')
+        responseDescription = $('<span class="mr-2">Поле загрузки файла</span>')
+        responseData = $(`<input name="file-field-${fieldsCount}" type="text" placeholder="Название">`)
+    }
+
+    responseNode.append(responseDescription, responseData)
+    $('.response-fields').append(responseNode)
+
+})
 </script>

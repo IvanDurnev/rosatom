@@ -1,6 +1,6 @@
 from app import db
 from app.main import bp
-from flask import render_template, request
+from flask import render_template, request, redirect
 from flask_login import login_required, current_user
 from app.main.forms import CreateOrder
 from app.models import OrderTypes, Tag, Order
@@ -10,6 +10,7 @@ import os
 import subprocess
 import random
 import speech_recognition as sr
+import json
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -31,6 +32,12 @@ def index():
 
 
     if create_order_form.validate_on_submit():
+        all_fields = request.form
+        custom_fields = {}
+        for field in all_fields:
+            if 'field' in field.split('-'):
+                custom_fields[field.split('-')[0]] = all_fields[field]
+
         order = Order()
         order.creator = current_user.id
         order.title = create_order_form.title.data
@@ -46,8 +53,11 @@ def index():
         for user in tag.users:
             order.executors.append(user)
 
+        order.reactions = json.dumps(custom_fields)
+
         db.session.add(order)
         db.session.commit()
+        return redirect(request.referrer)
     return render_template('main/index.html',
                            title=title,
                            create_order_form=create_order_form,
