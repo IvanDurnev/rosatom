@@ -4,8 +4,6 @@ from flask_login import login_user, logout_user, current_user
 from flask import render_template, redirect, url_for, flash, request
 from app.models import User, Group
 from app.auth.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
-from string import ascii_letters
-from random import choice
 from app import Config
 from flask_mail import Message
 
@@ -18,10 +16,9 @@ def logout():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    title = 'Платформа для онлайн-мероприятий'
-    bot_name = Config.BOT_NAME
+    title = 'Задачник'
     if current_user.is_authenticated:
-        return redirect(url_for('main.index', bot_name=bot_name))
+        return redirect(url_for('main.index'))
     form = LoginForm()
     if form.validate_on_submit():
         user: User = User.query.filter(User.email == form.login.data).first()
@@ -29,14 +26,10 @@ def login():
             flash('Неверный адрес электронной почты или пароль. Если вы не регистрировались, нажмите кнопку "ЗАРЕГИСТРИРОВАТЬСЯ" ниже')
             return redirect(url_for('auth.login'))
         login_user(user, remember=bool(form.remember_me.data))
-        if not current_user.tg_id:
-            return render_template('auth/join_telegram.html', title='Подключитесь к нашему боту', bot_name=bot_name)
-        return redirect(url_for('main.index', bot_name=bot_name))
+        return redirect(url_for('main.index'))
     return render_template('auth/login.html',
                            form=form,
-                           title=title,
-                           bot_name=bot_name,
-                           yandex_verification_content=Config.YANDEX_VERIFICATION_CONTENT)
+                           title=title)
 
 
 @bp.route('/registration', methods=['GET', 'POST'])
@@ -52,7 +45,7 @@ def register():
             user_tg_id = form.tg_id.data = request.args['user_tg_id']
             user: User = User.query.filter(User.tg_id == user_tg_id).first()
             form.first_name.data = user.first_name
-    # form.group.choices = [(group.name, group.name) for group in Group.query.all()]
+    form.group.choices = [(str(group.id), group.name) for group in Group.query.all()]
     title = 'Регистрация'
 
     if current_user.is_authenticated:

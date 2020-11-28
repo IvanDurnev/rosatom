@@ -16,16 +16,10 @@ user_tag = db.Table('user_tag',
                     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
                     )
 
-
-group_moderators = db.Table('group_moderators',
-                              db.Column('group_id', db.Integer, db.ForeignKey('group.id')),
-                              db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-                              )
-
-
-invited_users = db.Table('invited_users',
-                         db.Column('inviter', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-                         db.Column('invited', db.Integer, db.ForeignKey('user.id'), primary_key=True))
+order_executor = db.Table('order_executor',
+                      db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                      db.Column('order_id', db.Integer, db.ForeignKey('order.id'))
+                      )
 
 
 class User(UserMixin, db.Model):
@@ -34,8 +28,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True)
     email = db.Column(db.String(100), index=True)
     phone = db.Column(db.String(18), index=True, unique=True)
+    private_number = db.Column(db.String(20), default='')
     is_bot = db.Column(db.Boolean, index=True)
     first_name = db.Column(db.String(64), index=True)
+    position = db.Column(db.String(64))
     last_name = db.Column(db.String(64), index=True)
     additional_code = db.Column(db.String(64), index=True)
     language_code = db.Column(db.String(5), index=True, default='ru')
@@ -44,27 +40,13 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(12), index=True)
     group = db.Column(db.Integer, db.ForeignKey('group.id'), index=True, default=1)
     registered = db.Column(db.DateTime, index=True, nullable=True, default=datetime.now())
-    unsubscribed = db.Column(db.Boolean, default=False)
-    available_tickets = db.Column(db.Integer, default=0)
-    promo_codes = db.Column(db.JSON)
-    his_invited_users = db.relationship('User',
-                                        secondary=invited_users,
-                                        primaryjoin=(invited_users.c.inviter == id),
-                                        secondaryjoin=(invited_users.c.invited == id),
-                                        backref=db.backref('inviter', lazy=True),
-                                        lazy='dynamic')
+    priority = db.Column(db.Integer)
+    boss = db.Column(db.Integer, db.ForeignKey('user.id'))
+
     tags = db.relationship('Tag',
                            secondary=user_tag,
                            lazy='subquery',
                            backref=db.backref('tags', lazy=True))
-    moderation_groups = db.relationship('Group',
-                                        secondary=group_moderators,
-                                        lazy='subquery',
-                                        backref=db.backref('moderation_groups', lazy=True))
-    user_moderators = db.relationship('User',
-                                      secondary=group_moderators,
-                                      lazy='subquery',
-                                      backref=db.backref('my_moderators', lazy=True))
 
     def set_unsubscribed(self):
         self.unsubscribed = True
@@ -116,11 +98,6 @@ class User(UserMixin, db.Model):
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), index=True)
-    time_zone = db.Column(db.Integer, default=9)
-    moderators = db.relationship('User',
-                                 secondary=group_moderators,
-                                 lazy='subquery',
-                                 backref=db.backref('moderators', lazy=True))
     users = db.relationship('User', backref='users', lazy=True)
 
     def __repr__(self):
@@ -143,3 +120,43 @@ class MainMenuItems(db.Model):
     callback = db.Column(db.String(30))
     enabled = db.Column(db.Boolean, default=True)
     order = db.Column(db.Integer, unique=True)
+
+
+class OrderTypes(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(30))
+    description = db.Column(db.String(100))
+    color = db.Column(db.String(6))
+
+
+class OrderComments(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    order = db.Column(db.Integer, db.ForeignKey('order.id'))
+    creation_date = db.Column(db.DateTime, default=datetime.now())
+    text = db.Column(db.String(2048))
+
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    base_order = db.Column(db.Integer, db.ForeignKey('order.id'))
+    creation_date = db.Column(db.DateTime, default=datetime.now())
+    creator = db.Column(db.Integer, db.ForeignKey('user.id'))
+    title = db.Column(db.String(512))
+    description = db.Column(db.String(4096))
+    description_sound = db.Column(db.String(1024))
+    priority = db.Column(db.Integer, default=1)
+    type = db.Column(db.Integer, db.ForeignKey('order_types.id'))
+    interval = db.Column(db.Integer, default=0)
+    deadline = db.Column(db.DateTime)
+    done = db.Column(db.Boolean, default=False)
+    reactions = db.Column(db.JSON, default={})
+    status = db.Column()
+    executors = db.relationship('User',
+                                secondary=order_executor,
+                                lazy='subquery',
+                                backref=db.backref('executors', lazy=True))
+
+
+    def get_comments(self):
+        return OrderComments.query.filter(OrderComments.order == self.id).order_by(OrderComments.creation_date).all()

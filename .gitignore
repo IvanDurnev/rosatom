@@ -131,4 +131,5 @@ dmypy.json
 .idea/
 .rosnano.py.icloud
 ngrok
+migrations/
 
