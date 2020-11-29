@@ -13,7 +13,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
-login.login_message = u'Пожалуйста, авторизуйтесь, чтобы попасть на страницу трансляции.'
+login.login_message = u'Пожалуйста, авторизуйтесь, чтобы попасть в систему.'
 mail = Mail()
 
 bot = telegram.Bot(token=Config.TG_TOKEN)

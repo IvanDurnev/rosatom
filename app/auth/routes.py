@@ -21,9 +21,12 @@ def login():
         return redirect(url_for('main.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user: User = User.query.filter(User.email == form.login.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Неверный адрес электронной почты или пароль. Если вы не регистрировались, нажмите кнопку "ЗАРЕГИСТРИРОВАТЬСЯ" ниже')
+        user: User = User.query.filter(User.private_number == form.login.data).first()
+        # if user is None or not user.check_password(form.password.data):
+        #     flash('Неверный адрес электронной почты или пароль. Если вы не регистрировались, нажмите кнопку "ЗАРЕГИСТРИРОВАТЬСЯ" ниже')
+        #     return redirect(url_for('auth.login'))
+        if user is None:
+            flash('Нет сотрудника с таким табельным номером. Возможно, вы ошиблись при вводе.')
             return redirect(url_for('auth.login'))
         login_user(user, remember=bool(form.remember_me.data))
         return redirect(url_for('main.index'))
