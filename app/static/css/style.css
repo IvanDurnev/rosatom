@@ -15,10 +15,15 @@
 .second-menu{
     background-color: #ECECEC;
     max-height: 100vh;
-    overflow: scroll;
+    overflow-y: auto;
 }
 
 .nav-link{
     color: #fff;
+}
+
+.third-menu {
+    max-height: 100vh;
+    overflow-y: auto;
 }
 

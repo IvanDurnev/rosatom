@@ -151,7 +151,8 @@ def get_order(order_id):
                            order=Order.query.get(order_id),
                            comments=comments,
                            derived_orders=derived_orders,
-                           orders_stats=orders_stats)
+                           orders_stats=orders_stats,
+                           list=list, reversed=reversed)
 
 
 @bp.route('/send_comment', methods=['POST'])
