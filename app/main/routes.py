@@ -4,7 +4,7 @@ from app.main import bp
 from flask import render_template, request, redirect, jsonify
 from flask_login import login_required, current_user
 from app.main.forms import CreateOrder, CreateNote
-from app.models import OrderTypes, Tag, Order, CustomInputs, Note, OrderComments
+from app.models import OrderTypes, Tag, Order, CustomInputs, Note, OrderComments, User
 from werkzeug.utils import secure_filename
 from config import Config
 import os
@@ -28,17 +28,23 @@ def index():
     create_order_form = CreateOrder()
     for order_type in OrderTypes.query.all():
         create_order_form.type.choices.append((str(order_type.id), order_type.title))
+
+    create_order_form.executors.choices.append(('0', 'не выбрано'))
     for tag in Tag.query.all():
         create_order_form.executors.choices.append((str(tag.id), tag.name))
+
 
     create_note_form = CreateNote()
 
     if create_order_form.validate_on_submit():
         all_fields = request.form
         custom_fields = {}
+        personal_executors = []
         for field in all_fields:
             if 'field' in field.split('-'):
                 custom_fields[field.split('-')[0]] = all_fields[field]
+            if 'executor' in field.split('-'):
+                personal_executors.append(User.query.get(field.split('-')[-1]))
 
         order = Order()
         order.creator = current_user.id
@@ -58,9 +64,13 @@ def index():
 
         order.status = 1
 
-        tag = Tag.query.filter(Tag.id == create_order_form.executors.data).first()
-        for user in tag.users:
-            order.executors.append(user)
+        if create_order_form.executors.data != '0':
+            tag = Tag.query.filter(Tag.id == create_order_form.executors.data).first()
+            for user in tag.users:
+                order.executors.append(user)
+        if personal_executors:
+            for user in personal_executors:
+                order.executors.append(user)
 
         order.reactions = json.dumps(custom_fields)
 
@@ -160,3 +170,10 @@ def send_comment():
     db.session.commit()
 
     return 'ok'
+
+
+@bp.route('/get_users_<text>', methods=['GET'])
+def get_users(text):
+    users: User = User.query.filter(User.last_name.contains(text)).all()
+    return render_template('main/__executors_list.html',
+                           users=users)
