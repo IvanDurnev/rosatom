@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 from app import db
 from app.main import bp
 from flask import render_template, request, redirect, jsonify
@@ -152,7 +152,8 @@ def get_order(order_id):
                            comments=comments,
                            derived_orders=derived_orders,
                            orders_stats=orders_stats,
-                           list=list, reversed=reversed)
+                           list=list, reversed=reversed,
+                           time=datetime.now(), int=int)
 
 
 @bp.route('/send_comment', methods=['POST'])
