@@ -42,7 +42,7 @@
             element: 'donut{{order.id}}',
             data: [
             {label: "Времени прошло", value: {{ int((time.timestamp() - order.creation_date.timestamp())/60/60) }} },
-            {label: "Времени осталось", value: {{ int((order.deadline.timestamp() - time.timestamp())/60/60) }}}
+            {label: "Времени осталось", value: {{ 0 if int((order.deadline.timestamp() - time.timestamp())/60/60) <= 0 else int((order.deadline.timestamp() - time.timestamp())/60/60) }}}
             
             ]
         });
