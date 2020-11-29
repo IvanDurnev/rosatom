@@ -72,17 +72,17 @@
 
 <div class="comments-area">
     <h4>Комментарии:</h4>
+    <form class="mt-5" onsubmit="sendComment({{ order.id }}, {{ current_user.id }});">
+        <p class="mb-0">Добавить комментарий</p>
+        <input class="form-control" id='comment_field' type="text"> 
+        <button class="btn btn-success" type="button" id='voicecomment' rec='false' onclick="event.preventDefault(); cmt_btn_voice()">Записать аудио</button>
+        <button class="btn btn-info" type="submit">Добавить</button>
+    </form>
     <ul>
-        {% for comment in comments %}
+        {% for comment in list(reversed(comments)) %}
             <p><b>{{ comment.get_user() }}</b>: {{ comment.text }}</p>
         {% endfor %}
     </ul>
-
-    <form class="mt-5" onsubmit="sendComment({{ order.id }}, {{ current_user.id }});">
-        <p class="mb-0">Добавить комментарий</p>
-        <input class="form-control" id='comment_field' type="text"> <button class="btn btn-success" type="button" id='voicecomment' rec='false' onclick="event.preventDefault(); cmt_btn_voice()">Записать аудио</button>
-        <button class="btn btn-info" type="submit">Добавить</button>
-    </form>
 </div>
 
 <script>
@@ -106,9 +106,9 @@
 
 <style>
     .comments-area {
-        position: absolute;
+        position: relative;
         bottom: 0;
-        width: 98%;
+        width: 100%;
         background-color: #ECECEC;
         padding: 1%;
         margin-top: 3%;
