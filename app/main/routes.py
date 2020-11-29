@@ -53,7 +53,7 @@ def index():
 
         for field in all_fields:
             if 'file_id' in field:
-                order.description_sound = os.path.join(Config.UPLOAD_FOLDER, f'{all_fields["file_id"]}sound.wav')
+                order.description_sound = f'{all_fields["file_id"]}sound.ogg'
                 # print(os.path.join(Config.UPLOAD_FOLDER, f'{all_fields["file_id"]}sound.wav'))
 
         order.status = 1
@@ -88,7 +88,8 @@ def index():
                            create_note_form = create_note_form,
                            orders_iam_creator=orders_iam_creator,
                            orders_iam_executor=orders_iam_executor,
-                           custom_inputs=CustomInputs.query.all())
+                           custom_inputs=CustomInputs.query.all(),
+                           list=list, reversed=reversed)
 
 
 @bp.route("/get_preset/<id>")
